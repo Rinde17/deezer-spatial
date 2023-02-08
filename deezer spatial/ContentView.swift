@@ -6,6 +6,43 @@
 //
 
 import SwiftUI
+import AVFoundation
+import MediaPlayer
+import AVKit
+
+struct TestAudioView: View {
+    
+    @State var audioPlayer: AVAudioPlayer!
+    var body: some View {
+        VStack {
+            Text("Play").font(.system(size: 45)).font(.largeTitle)
+            HStack {
+                Spacer()
+                Button(action: {
+                    self.audioPlayer.play()
+                }) {
+                    Image(systemName: "play.circle.fill").resizable()
+                        .frame(width: 50, height: 50)
+                        .aspectRatio(contentMode: .fit)
+                }
+                Spacer()
+                Button(action: {
+                    self.audioPlayer.pause()
+                }) {
+                    Image(systemName: "pause.circle.fill").resizable()
+                        .frame(width: 50, height: 50)
+                        .aspectRatio(contentMode: .fit)
+                }
+                Spacer()
+                
+            }
+        }
+        .onAppear {
+            let sound = Bundle.main.path(forResource: "song", ofType: "mp3")
+            self.audioPlayer = try! AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound!))
+        }
+    }
+}
 
 struct SpatialView: View {
     var body: some View {
@@ -43,13 +80,19 @@ struct SpatialView: View {
 }
 
 struct ContentView: View {
+    
     var body: some View {
         NavigationStack {
             VStack {
                 NavigationLink {
                     SpatialView()
                 } label: {
-                    Label("Show détails view", systemImage: "globe")
+                    Label("Acceder à la salle de concert", systemImage: "globe")
+                }
+                NavigationLink {
+                    TestAudioView()
+                } label: {
+                    Label("Test audio view", systemImage: "globe")
                 }
             }
             .navigationTitle("Accueil")
