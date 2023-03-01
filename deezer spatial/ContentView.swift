@@ -13,6 +13,8 @@ import AVKit
 struct TestAudioView: View {
     
     @State var audioPlayer: AVAudioPlayer!
+    @State var currentTime: TimeInterval = 0
+    @State var duration: TimeInterval = 60
     var body: some View {
         VStack {
             Text("Play").font(.system(size: 45)).font(.largeTitle)
@@ -34,12 +36,22 @@ struct TestAudioView: View {
                         .aspectRatio(contentMode: .fit)
                 }
                 Spacer()
+            }
+            VStack {
+                //let testDateRange = Date()...Date().addingTimeInterval(2*60)
                 
+                let start = Date().addingTimeInterval(currentTime)
+                let end = Date().addingTimeInterval(duration)
+
+                ProgressView(timerInterval: start...end, countsDown: false)
             }
         }
         .onAppear {
             let sound = Bundle.main.path(forResource: "song", ofType: "mp3")
             self.audioPlayer = try! AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound!))
+            if (self.audioPlayer.isPlaying) {
+                
+            }
         }
     }
 }
